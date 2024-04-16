@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peppa Pig</title>
+    <style>
+      /* Para adaptar la página web que teníamos creada a un diseño responsivo conviene:
+      - quitar todos los anchos en píxeles que tenínamos, salvo márgenes, paddings, bordes
+      o algunos otros casos concretos
+      - ponerles un width o max-width a las imágenes en porcentajes
+      - quitamos los float, clearfix o display: inline-block que pusimos para colocar
+      los elementos, aunque no hay que quitarlos todos, algunos tienen su razón de ser
+       */
+      @font-face {
+        font-family: peppa;
+        src: url(fuentes/PeppaBold_normal_normal.woff2);
+      }
+      * {
+        margin: 0;
+        padding-left: 0;
+        font-size: 100%;
+      }
+
+      body {
+        background-color: #225da9;
+        background-image: url(imagenes/fondo.png);
+        font-family: peppa, sans-serif;
+        /* Pensando en monitores con muchos píxeles de ancho, normalmente conviente limitar
+        el ancho de la página, ya sea en el body o en alguno de los contenedores principales */
+        max-width: 1200px;
+        /* Centramos el contenido horizontalmente */
+        margin: auto;
+      }
+      header {
+        margin: 1rem;
+        /* Vamos a colocar los iconos de las redes sociales con posicionamiento absoluto,
+        con lo que indicamos con esto que el header sea su padre; si no sería el body */
+        position: relative;
+      }
+      /* Hemos puesto el logo de Peppa Pig con fondo, aunque valdría perfectamente como
+      img pues es contenido. También un h1 con el título de la página, pero no queremos 
+      que se vea. Una solución sería ponerle display:none; pero no se lo leería a una
+      persona que use un lector de pantalla, con lo que una alternativa es ponerle una
+      indentación izquierda muy negativa y así se salga fuera de pantalla pero se siga
+      leyendo en estos lectores */
+      header h1 {
+        font-size: 2rem;
+        text-indent: -1000px;
+        background-image: url(imagenes/logo.webp);
+        background-repeat: no-repeat;
+        /* En ocasiones si nos interesa dar altos fijos en píxeles; en este caso por
+        el logo de Peppa Pig */
+        height: 96px;
+      }
+
+      header nav a {
+        font-size: 1.5rem;
+        text-decoration: none;
+        color: white;
+        /* Queremos darles un padding inferior y superior a los enlaces, cosa que
+        no funciona correctamente en los elementos inline */
+        display: inline-block;
+        padding: 0.5rem 1rem;
+      }
+      header nav a:hover {
+        color: gold;
+      }
+      .redes {
+        /* Colocamos los iconos de las rede sociales en la parte superior derecha de su
+        contenedor, en este caso el header, dejando un espacio de 10 píxeles */
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      .redes a {
+        padding: 0 10px;
+      }
+      .redes img {
+        /* También nos interesa un alto en concreto para estos iconos */
+        height: 20px;
+      }
+      main h2 {
+        font-size: 3rem;
+        font-weight: normal;
+        background: rgb(189, 37, 133);
+        border-top: 2px solid white;
+        border-bottom: 2px solid white;
+        padding: 1rem;
+        color: white;
+      }
+      .personajes {
+        text-align: center;
+      }
+      .personajes h2 {
+        text-align: left;
+      }
+      .personaje {
+        color: white;
+        font-size: 1.7rem;
+        text-align: center;
+      }
+      .personaje img {
+        /* Para que no tengamos problemas con el diseño responsivo, le damos un 
+        max-width de 100% a las imágenes de los personajes */
+        max-width: 100%;
+      }
+      /* No funcionará en un dispositivo táctil salvo que use algún ratón */
+      .personaje:hover img {
+        filter: drop-shadow(2px 2px 4px black);
+      }
+      /* Para que se pongan 1, 2, 3, ... o más personajes por línea, podemos
+      recurrir a flex, que además va repartiendo el ancho a las columnas */
+      .familiaPig {
+        display: flex;
+        /* Si no usamos wrap, irián todos en la misma línea con lo que habría
+        que realizar desplazamiento lateral para verlos todos */
+        flex-wrap: wrap;
+        /* Espacio entre filas */
+        row-gap: 50px;
+        margin: 20px;
+        /* Dejamos el mismo espacio horizontal entre los personajes, incluyendo 
+        los laterales, con lo que se distribuyen bastante bien horizontalmente en
+        las diferentes líneas */
+        justify-content: space-evenly;
+      }
+
+      .historia p {
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+        color: white;
+        padding: 1rem;
+        font-size: 1.2rem;
+        line-height: 2rem; /* Aumentamos la distancia entre líneas */
+        text-indent: 3rem; /* La priemra línea comienza más hacia adentro */
+        text-align: left;
+      }
+      .historia img {
+        /* Para que no tengamos problemas con el diseño responsivo, le damos un 
+        max-width de 100% a las imágenes de los personajes. En este caso la imagen
+        es muy grande por lo que se saldría por la derecha en dispositivos pequeños */
+        max-width: 90%;    
+        display: block;
+        margin: auto;
+      }
+      footer {
+        background-color: #2977bc;
+        padding: 1rem;
+        text-align: center;
+      }
+      footer a {
+        display: inline-block;
+        border-right: 1px solid white;
+        color: white;
+        text-decoration: none;
+        font-family: Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        padding: 0.7rem 5px;
+      }
+      footer a:hover {
+        color: #e86bba;
+      }
+
+      /* En pantallas más pequeñas, solo cabe un personaje, con lo que quedaría mucho
+      espacio lateral. Con esta media query les damos un ancho mínimo del 90% */
+      @media all and (max-width: 739px) {
+        .personaje, .personaje img {
+          min-width: 90%;
+        }
+      }
+      /* En pantallas pequeñas queremos que los enlaces del menú vayan verticales en
+      lugar de horizontales. Una solución mejor sería usar un menú hamburguesa */
+      @media all and (max-width:500px) {
+        header nav a {
+          display: block;
+          margin: 10px auto auto;
+          /* Como hemos usado margin para centrar un elemento de tipo bloque, debemos
+          darle un ancho menor del 100% que ocupa. Una opción es decirle que ocupe
+          lo que ocupe son contenido */
+          width: fit-content;
+        }
+        /* En pantallas pequeñas preferimos que haya dos bordes en los enlaces inferiores */
+        footer a {
+          border-left: 1px solid white;
+        }
+        /* Tambiéb que el tamaño de la letra de los encabezados sea menor */
+        main h2 {
+          font-size: 1.7rem;
+        }
+        /* Y que la imagen del logo sea menor */
+        header h1 {
+          height: 80px;
+          /* Que se ajuste al tamaño de su contenedor sin deformarse */
+          background-size: contain;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Peppa Pig</h1>
+      <div class="redes">
+        <a href=""><img src="imagenes/facebook.png" alt="facebook" /></a>
+        <a href=""><img src="imagenes/twitter.png" alt="twitter" /></a>
+        <a href=""><img src="imagenes/youtube.png" alt="youtube" /></a>
+      </div>
+      <nav>
+        <a href="">Aplicaciones</a>
+        <a href="">Personajes</a>
+        <a href="">Productos</a>
+      </nav>
+    </header>
+    <main>
+      <section class="personajes">
+        <h2>Personajes</h2>
+        <!-- Hemos creado este div para aplicarle el flex, ya que de aplicarlo al
+        section personajes, afectaría al h2 y no es lo que queremos -->
+        <div class="familiaPig">
+          <div class="personaje">
+            <img src="imagenes/peppapig.webp" alt="Peppa Pig" />
+            <p>Peppa Pig</p>
+          </div>
+          <div class="personaje">
+            <img src="imagenes/georgepig.webp" alt="George Pig" />
+            <p>George Pig</p>
+          </div>
+          <div class="personaje">
+            <img src="imagenes/mamapig.webp" alt="Mama Pig" />
+            <p>Mamá Pig</p>
+          </div>
+          <div class="personaje">
+            <img src="imagenes/papapig.webp" alt="Papa Pig" />
+            <p>Papá Pig</p>
+          </div>
+          <div class="personaje">
+            <img src="imagenes/abuelapig.webp" alt="Abuela Pig" />
+            <p>Abuela Pig</p>
+          </div>
+          <div class="personaje">
+            <img src="imagenes/abuelopig.webp" alt="Abuelo Pig" />
+            <p>Abuelo Pig</p>
+          </div>
+        </div>
+      </section>
+    <section class="historia">
+        <h2>Historia</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis at molestias recusandae vitae? Nisi cupiditate consequatur quisquam repellendus corporis, reiciendis fugiat ad eius blanditiis earum nihil magni a veritatis minima doloribus iste excepturi repudiandae, tenetur dolorum rerum non? Recusandae, incidunt eos! Quis dolor similique nostrum sapiente architecto ullam explicabo, cum mollitia illum, sint quae! Rerum, asperiores repellendus consequuntur ea omnis officiis cum corporis esse voluptas. Asperiores at, voluptatibus recusandae omnis numquam dolorem similique cumque dolorum! Quaerat fugit aperiam, aliquam itaque animi, reprehenderit laboriosam tenetur dicta nisi modi, vero maxime! Maiores pariatur velit possimus voluptatum nostrum ipsam, quo iusto omnis, fugiat voluptas voluptate magni in quas qui. Recusandae assumenda mollitia, dolorem quo laborum nulla enim distinctio quisquam soluta minus inventore quas reiciendis exercitationem dolores voluptatem temporibus neque? Repellendus provident delectus asperiores cupiditate corrupti temporibus iusto quo? Recusandae labore laudantium praesentium, est molestiae expedita harum delectus, sunt accusamus ipsa necessitatibus. Ipsa suscipit, deserunt illum animi nostrum quaerat necessitatibus labore quasi pariatur maxime cumque ipsam minima a laborum facere harum cupiditate perspiciatis. Veritatis, quam. Repellendus iste asperiores hic optio maiores ex nisi sed quos, porro et tempora. Quasi, iste. Praesentium, consequatur tempora voluptates accusamus enim sapiente mollitia ut illo laudantium at voluptatem.</p>
+        <img src="imagenes/barco.webp" alt="barco">
+      </section>
+    </main>
+    <footer>
+        <a href="">DÓNDE COMPRAR</a>
+        <a href="">Mapa de sitio</a>
+        <a href="">Atención al cliente</a>
+        <a href="">Política de Privacidad</a>
+        <a href="">Términos y condiciones de uso</a>
+        <a href="">Cookies</a>
+    </footer>
+  </body>
+</html>
