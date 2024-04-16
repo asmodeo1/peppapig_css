@@ -6,3 +6,4 @@
 - Al pasar el ratón por las imágenes de los personajes, debe aplicárseles un filtro filter:drop-shadow(2px 2px 4px black);
 - La página debe tener el tipo de letra PeppaBold_normal_normal.woff2
   
+Se ha añadido la página idnex responsive.htm que modifica index.htm para que la página sea responsiva.
